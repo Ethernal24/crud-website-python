@@ -1,0 +1,175 @@
+{% extends "index.html" %} {% block title %}Home{% endblock %}
+
+{% block content%}
+<div class="container">
+    <div class="col md-12">
+        <div class="jumbotron p-3">
+            <h3>Manage Receipt 
+                <button type ="button" class=" btn btn-success float-right" data-toggle="modal" data-target ="#mymodal">
+                    Tambah Receipt
+                </button> 
+            </h3>
+            <table class="table table-bordered table-dark">
+                
+                <tr>
+                    <th>ID</th>
+                    <th>Nama Menu</th>
+                    <th>Type</th>
+                    <th>Nama Pembeli</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total Harga</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for row in nota %}
+                <tr>
+                    <td>{{row.id}}</td>
+                    <td>{{row.nama_menu}}</td>
+                    <td>{{row.tipe_menu}}</td>
+                    <td>{{row.nama_pembeli}}</td>
+                    <td>{{row.harga}}</td>
+                    <td>{{row.quantity}}</td>
+                    <td>{{row.total_harga}}</td>
+                    <td>
+                        <a href="/update {{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.id}}">Edit</a>
+                        <a href="/delete/ {{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Yakin ingin hapus?')" >Delete</a>
+                    </td>
+                </tr>
+
+                <!-- Section Edit -->
+<div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title"> Perbaruhi Informasi</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/update" method="POST">
+                    <div class="form-group">
+                        <label>Nama Menu</label>
+                        <input type="hidden"
+                        name="id"
+                        value="{{row.id}}">
+                        <input type="text" class="form-control" name="namaMenu" value="{{row.nama_menu}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="typeMenu">Pilih Type Menu</label>
+                        <br/>
+                        <input type="radio" id="coffee" name="typeMenu" value="Coffee" {% if row.tipe_menu == "Coffee"%}checked{% endif %}>
+                        <label for="coffee">Coffee</label><br>
+                        <input type="radio" id="noncoffee" name="typeMenu" value="Noncoffee"{% if row.tipe_menu == "Noncoffee"%}checked{% endif %}>
+                        <label for="noncoffee">Non Coffee</label><br>
+                        <input type="radio" id="frape" name="typeMenu" value="Frape"{% if row.tipe_menu == "Frape"%}checked{% endif %}>
+                        <label for="frape">Frape</label>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Pembeli</label>
+                        <input type="text" class="form-control" name="namaPembeli" value="{{row.nama_pembeli}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Harga</label>
+                        <input type="number" class="form-control" name="harga" value="{{row.harga}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" class="form-control" name="quantity" value="{{row.quantity}}">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Harga</label>>
+                        <input type="number" class="form-control" name="totalHarga" value="{{row.total_harga}}">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Update Data</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+                {% endfor %}
+                
+            </table>
+        </div>
+    </div>
+</div>
+<!-- section Add -->
+<div id="mymodal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Tambahkan Receipt</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/insert" method="POST">
+                    <div class="form-group">
+                        <label for="namaMenu">Nama Menu</label>
+                        <input type="text"
+                        class="form-control"
+                        id="namaMenu"
+                        name="namaMenu"
+                        placeholder="Masukan Nama Menu"
+                        required="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="typeMenu">Pilih Type Menu</label>
+                        <br/>
+                        <input type="radio" id="coffee" name="typeMenu" value="Coffee">
+                        <label for="coffee">Coffee</label><br>
+                        <input type="radio" id="noncoffee" name="typeMenu" value="Noncoffee">
+                        <label for="noncoffee">Non Coffee</label><br>
+                        <input type="radio" id="frape" name="typeMenu" value="Frape" required="1">
+                        <label for="frape">Frape</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="namaPembeli">Nama Pembeli</label>
+                        <input type="text"
+                        class="form-control"
+                        id="namaPembeli"
+                        name="namaPembeli"
+                        placeholder="Masukan Nama Pembeli"
+                        required="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="harga">Harga</label>
+                        <input type="number"
+                        class="form-control"
+                        id="harga"
+                        name="harga"
+                        placeholder="Masukan harga"
+                        required="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="quantity">Quantity</label>
+                        <input type="number"
+                        class="form-control"
+                        id="quantity"
+                        name="quantity"
+                        placeholder="Masukan Quantity"
+                        required="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalHarga">Total Harga</label>
+                        <input type="number"
+                        class="form-control"
+                        id="totalHarga"
+                        name="totalHarga"
+                        placeholder="Masukkan total harga"
+                        required="1">
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add Receipt</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}
